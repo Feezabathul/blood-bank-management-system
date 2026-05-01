@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Donor Directory - BloodConnect{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Donor Directory</h1>
+    <p>Manage all registered donors, view history, and handle account removal.</p>
+</div>
+
+<div class="table-wrapper fade-in">
+    <table id="donor-list-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Group</th>
+                <th>Age</th>
+                <th>Contact</th>
+                <th>Last Donation</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Filled via JS -->
+            <tr>
+                <td colspan="8" style="text-align: center; padding: 4rem; color: var(--text-muted);">
+                    Loading donor records...
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="pagination" style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-bottom: 4rem;">
+    <!-- Future Pagination Support -->
+</div>
+{% endblock %}

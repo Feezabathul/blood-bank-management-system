@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - BloodConnect{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>System Dashboard</h1>
+    <p>Real-time overview of blood bank operations and donor statistics.</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-info">
+            <h3>Total Donors</h3>
+            <div class="value" id="stat-total-donors">0</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-droplet"></i></div>
+        <div class="stat-info">
+            <h3>Blood Groups</h3>
+            <div class="value">8</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+        <div class="stat-info">
+            <h3>Monthly Donations</h3>
+            <div class="value" id="stat-monthly-donations">0</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-check-circle"></i></div>
+        <div class="stat-info">
+            <h3>Eligible Now</h3>
+            <div class="value" id="stat-eligible-donors">0</div>
+        </div>
+    </div>
+</div>
+
+<div class="form-section" style="max-width: 100%;">
+    <h2 class="form-title" style="text-align: left;">Inventory by Blood Group</h2>
+    <p style="margin-bottom: 2rem; color: var(--text-muted);">A breakdown of donor availability across different blood types.</p>
+    
+    <div id="blood-group-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1.5rem;">
+        <!-- Filled via JS: Premium stat bubbles -->
+    </div>
+</div>
+{% endblock %}

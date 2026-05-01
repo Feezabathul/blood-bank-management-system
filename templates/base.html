@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BloodConnect - Premium Blood Bank Management{% endblock %}</title>
+    <!-- Google Fonts: Outfit for modern, professional look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Modern Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body data-page="{{ request.path }}">
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-droplet"></i>
+                </div>
+                <span>BloodConnect</span>
+            </div>
+            
+            <ul class="sidebar-nav">
+                {% if session.get('staff_id') %}
+                    <li class="nav-label">Management</li>
+                    <li><a href="/" class="{{ 'active' if request.path == '/' else '' }}"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="/donors" class="{{ 'active' if request.path == '/donors' else '' }}"><i class="fa-solid fa-users"></i> Donor List</a></li>
+                    <li><a href="/donation" class="{{ 'active' if request.path == '/donation' else '' }}"><i class="fa-solid fa-hand-holding-medical"></i> Donations</a></li>
+                    <li><a href="/search" class="{{ 'active' if request.path == '/search' else '' }}"><i class="fa-solid fa-magnifying-glass"></i> Search Donors</a></li>
+                {% else %}
+                    <li class="nav-label">Public Portal</li>
+                    <li><a href="/" class="{{ 'active' if request.path == '/' else '' }}"><i class="fa-solid fa-house"></i> Home</a></li>
+                    <li><a href="/register" class="{{ 'active' if request.path == '/register' else '' }}"><i class="fa-solid fa-user-plus"></i> Register as Donor</a></li>
+                {% endif %}
+            </ul>
+
+            <div class="sidebar-footer">
+                {% if session.get('staff_id') %}
+                    <div class="user-info">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>{{ session.get('username') }}</span>
+                    </div>
+                    <a href="/logout" class="btn btn-outline"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                {% else %}
+                    <a href="/login" class="btn btn-outline"><i class="fa-solid fa-user-tie"></i> Staff Login</a>
+                {% endif %}
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="main-wrapper">
+            <!-- Top Header -->
+            <header class="top-header">
+                <!-- Flex spacer since search was removed -->
+                <div style="flex-grow: 1;"></div>
+                <div class="header-actions">
+                    <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+                    {% if not session.get('staff_id') %}
+                        <a href="/register" class="btn btn-primary btn-sm"><i class="fa-solid fa-heart"></i> Donate Now</a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="content-area fade-in">
+                <div class="container">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Global Toast Container -->
+    <div id="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

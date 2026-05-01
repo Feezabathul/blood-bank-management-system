@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Search Donors - BloodConnect{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Search Donors</h1>
+    <p>Find eligible donors by blood group and check their availability status.</p>
+</div>
+
+<div class="form-section" style="padding: 2.5rem; border-radius: var(--radius-md);">
+    <form id="search-form" style="display: flex; gap: 1.5rem; align-items: flex-end;">
+        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+            <label for="blood_group">Filter by Blood Group</label>
+            <select id="blood_group" name="blood_group" required>
+                <option value="" disabled selected>Select Blood Type</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="padding: 1rem 2.5rem;">Find Donors</button>
+    </form>
+</div>
+
+<div id="search-results-container" class="fade-in">
+    <div id="search-results" class="results-grid">
+        <!-- Results placeholder -->
+        <div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);">
+            <p>Select a blood group above to start searching.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
