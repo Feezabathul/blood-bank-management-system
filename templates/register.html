@@ -9,8 +9,16 @@
 </div>
 
 <div class="form-section">
+    {% if already_registered %}
+    <div style="text-align: center; padding: 2rem;">
+        <i class="fas fa-info-circle" style="font-size: 3rem; color: var(--primary-red); margin-bottom: 1rem;"></i>
+        <h2 class="form-title" style="border: none; padding: 0; margin-bottom: 1rem;">Registration Complete</h2>
+        <p style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 2rem;">You have already submitted your registration.</p>
+        <a href="/" class="btn btn-primary">Return to Home</a>
+    </div>
+    {% else %}
     <h2 class="form-title">Enter Donor Details</h2>
-    <form id="donor-registration-form" method="POST" action="/register">
+    <form id="donor-registration-form" method="POST" action="/register" onsubmit="handleFormSubmit(event)">
         <div class="form-group">
             <label for="full_name">Full Name</label>
             <input type="text" id="full_name" name="full_name" required placeholder="e.g. John Doe">
@@ -84,7 +92,26 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Complete Registration</button>
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Complete Registration</button>
     </form>
+
+    <script>
+        function handleFormSubmit(event) {
+            const btn = document.getElementById('submit-btn');
+            if (btn.disabled) {
+                event.preventDefault();
+                return false;
+            }
+            // Add a small delay to allow the form to submit before disabling
+            setTimeout(() => {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'not-allowed';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            }, 10);
+            return true;
+        }
+    </script>
+    {% endif %}
 </div>
 {% endblock %}

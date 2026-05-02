@@ -2,17 +2,22 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 from functools import wraps
 from werkzeug.security import check_password_hash
 import mysql.connector
+import os
+from dotenv import load_dotenv
 from datetime import datetime, timedelta
 
+# Load environment variables from .env file (if present)
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = 'blood_bank_super_secret_key_2026'
+app.secret_key = os.environ.get('SECRET_KEY', 'blood_bank_super_secret_key_2026')
 
 # MySQL Configuration - Update with your credentials
 db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'Feeza@2006',
-    'database': 'blood_bank'
+    'host': os.environ.get('DB_HOST', 'localhost'),
+    'user': os.environ.get('DB_USER', 'root'),
+    'password': os.environ.get('DB_PASSWORD', 'Feeza@2006'),
+    'database': os.environ.get('DB_NAME', 'blood_bank')
 }
 
 def get_db_connection():
@@ -70,6 +75,9 @@ def register_page():
     if 'staff_id' in session:
         return redirect(url_for('index'))
         
+    if session.get('registration_success'):
+        return render_template('register.html', already_registered=True)
+        
     if request.method == 'POST':
         full_name = request.form.get('full_name')
         age = request.form.get('age')
@@ -113,8 +121,11 @@ def register_page():
             conn.commit()
             print("DEBUG: Insert successful and committed.")
             
-            # Redirect to donor list on success
-            return redirect(url_for('donors_page'))
+            # Set session variable to prevent immediate duplicate
+            session['registration_success'] = True
+            
+            # Redirect to success page on success
+            return redirect(url_for('registration_success_page'))
             
         except Exception as e:
             print(f"DEBUG: SQL Error -> {str(e)}")
@@ -124,6 +135,13 @@ def register_page():
             conn.close()
             
     return render_template('register.html')
+
+@app.route('/registration-success')
+def registration_success_page():
+    # Only allow access if they just registered successfully
+    if not session.get('registration_success'):
+        return redirect(url_for('register_page'))
+    return render_template('registration_success.html')
 
 @app.route('/donation')
 @login_required
@@ -354,4 +372,6 @@ def delete_donor(donor_id):
         conn.close()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use environment variable for debug mode, defaults to False for production
+    is_debug = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(debug=is_debug)
